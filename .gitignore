@@ -1,0 +1,6 @@
+venv
+env
+pycache
+/pycache
+.venv
+.env

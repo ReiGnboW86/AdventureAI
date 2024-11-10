@@ -1,8 +1,8 @@
 # AdventureAI
 Choose your own adventure AI text game! I was inspired from our little Hackathon project creating a similar game using OpenAI Swarm agents.
-This project is planned to be using langchain and a vector database to create a better user experience (maybe I will use agents further down, I don't know yet)
+This project is planned to be using langchain and a vector database to create a better user experience.
 
-Please follow!
+Please star and follow!
 
 Decided to use Datastax AstraDB (Thanks Tech with Tim @ Youtube) as the Vector database for this project as their free tier is godly (5gb). 
 
@@ -61,7 +61,8 @@ Invited Felix to colab on this project since we made the Hackathon project toget
 Here we update the README.md in the main branch to show what we are currently working on implementing.
 
 * Bjorn
--
+
+Wrote basic structure and documentation so far
 
 * Felix
 - 

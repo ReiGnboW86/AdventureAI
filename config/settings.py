@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-# Ladda miljövariabler från .env-filen
 load_dotenv()
 
 """Handles connections to services we need:

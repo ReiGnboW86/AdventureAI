@@ -4,3 +4,7 @@ pycache
 /pycache
 .venv
 .env
+.json
+json
+.zip
+zip

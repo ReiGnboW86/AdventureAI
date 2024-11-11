@@ -8,3 +8,5 @@ pycache
 json
 .zip
 zip
+.gguf
+gguf

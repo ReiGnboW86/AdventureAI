@@ -4,11 +4,12 @@ This project is planned to be using langchain and a vector database to create a 
 
 Please star and follow!
 
-Decided to use Datastax AstraDB (Thanks Tech with Tim @ Youtube) as the Vector database for this project as their free tier is godly (5gb). 
+We just uncovered our next project for our class which is to learn PostgreSQL. Therefor, I have decided we are going to use that as our database to store the data together with pg_embeddings.
 
-Check them out (Tech with Tim's link for referral): https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbUhaYkFwTWw3ZjRuUlEwSGJsZTRMS2tyNjVRUXxBQ3Jtc0trNXV1R3d6ZC1iVGlZR0N6bnNscWFwcUxRQk55RFpCTjVUNjFXZFFJaW5pSDFGV3JwVk5ocjZWRGhLSUF2eGoyamdac0VGVFJlcUFnSVlLanJMQmhSZHM3bXR2OHl2cnFnbVpJclRqV01DY1hFQXRsQQ&q=https%3A%2F%2Fwww.datastax.com%2Flp%2Fastra-registration%3Futm_medium%3Dyoutube_video%26utm_source%3Ddatastax%26utm_campaign%3Dyt_influencers%26utm_content%3Dvector_search_tim_ruscica&v=nhYcTh6vw9A
+Decided on an LLM model to use for generation, due to its unhinged restrictions and filter, we're going to use Mistral's 7b Dolphin model Q4 K-M
+https://huggingface.co/TheBloke/dolphin-2.0-mistral-7B-GGUF
 
-UPDATE: We might have to switch from AstraDB to something local to keep our thought of doing this project absolutely free. Altho 5gb is alot, it might not be sufficient in the long run with image generation. I will look for a local open-source solution but we will use AstraDB for now.
+How this implementation is going to look is unclear at the moment, but we will figure it out as we go.
 
 # The Story so far
 

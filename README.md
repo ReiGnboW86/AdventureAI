@@ -72,21 +72,19 @@ Wrote extensive plan and updated file structure. We need a meeting soon to discu
 
 We decided we don't need all the previously specified agents, so this is the updated structure along with some packages we might use
 
+* Folders
 agents/: Contains all AI-driven components of the game.
-
-text_agent.py: Handles story generation using Mistral LLM.
-image_agent.py: Generates comic-style images using Stable Diffusion.
-sound_agent.py: Manages audio and voice generation with Bark/AudioCraft.
-npc_agent.py: Controls NPC behavior and dialogue.
-loot_agent.py: Handles item generation and distribution.
-combat_agent.py: Manages the battle system and death mechanics.
 utils/: Contains utility classes and functions.
-
-database.py: Interface for PostgreSQL using SQLAlchemy.
-dice_roller.py: Utility for probability and random event handling.
 models/: Contains data models for the game state and entities.
-
-game_models.py: Defines ORM models for the database.
 tests/: Contains unit tests for each component that needs testing.
 
-adventureai.py: The main game loop script.
+* text_agent.py: Handles story generation using Mistral LLM.
+* image_agent.py: Generates comic-style images using Stable Diffusion.
+* sound_agent.py: Manages audio and voice generation with Bark/AudioCraft.
+* npc_agent.py: Controls NPC behavior and dialogue.
+* loot_agent.py: Handles item generation and distribution.
+* combat_agent.py: Manages the battle system and death mechanics.
+* database.py: Interface for PostgreSQL using SQLAlchemy.
+* dice_roller.py: Utility for probability and random event handling.
+* game_models.py: Defines ORM models for the database.
+* adventureai.py: The main game loop script.

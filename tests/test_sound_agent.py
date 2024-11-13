@@ -1,0 +1,2 @@
+class TestSound:
+    pass

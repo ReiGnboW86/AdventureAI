@@ -2,34 +2,57 @@
 PostgreSQL Database Interface
 
 A streamlined database interface using SQLAlchemy for game state persistence.
-Not an agent - simply handles CRUD operations and data management.
 
 Schema:
-    - Characters (player characters and states)
-    - NPCs (non-player characters and monsters)
-    - Items (equipment, consumables, quest items)
-    - Effects (buffs, debuffs, status effects)
-    - Story_Progress (game state and choices)
-    - Combat_Log (battle history)
-    - Inventory (character possessions)
-    - Media_Cache (stored images and sounds)
+    characters:
+        - id: UUID primary key
+        - name: str
+        - stats: JSON
+        - inventory: JSON
+        - effects: JSON[]
+        - relationships: JSON
 
-Technical Implementation:
-    - SQLAlchemy ORM
-    - Connection pooling
+    npcs:
+        - id: UUID primary key
+        - name: str
+        - type: str (merchant/enemy/quest)
+        - stats: JSON
+        - inventory: JSON
+        - faction: str
+
+    game_state:
+        - id: UUID primary key
+        - character_id: UUID foreign key
+        - story_progress: JSON
+        - active_quests: JSON[]
+        - world_state: JSON
+
+    media_cache:
+        - id: UUID primary key
+        - type: str (image/sound)
+        - hash: str
+        - data: bytea
+        - created_at: timestamp
+
+Core Methods:
+    save_game_state(character_id: UUID, state: dict) -> None:
+        Persists current game state to database
+
+    load_game_state(character_id: UUID) -> dict:
+        Retrieves saved game state
+
+    update_character(character_id: UUID, updates: dict) -> None:
+        Applies updates to character record
+
+    cache_media(media_type: str, data: bytes) -> str:
+        Stores generated media with hash key
+
+Technical Features:
+    - Connection pooling via SQLAlchemy
+    - Automatic schema migrations
     - Transaction management
-    - Data validation
-    - Migration handling
-    - Backup systems
-
-Key Methods:
-    - save_game_state()
-    - load_game_state()
-    - update_character()
-    - store_media()
-    - get_npc_data()
-    - log_combat()
-    etc.
+    - Query optimization
+    - Backup/restore functionality
 """
 
 

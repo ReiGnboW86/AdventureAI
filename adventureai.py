@@ -4,95 +4,74 @@ AdventureAI - An AI-Powered Choose Your Own Adventure Game
 Main Game Architecture and Flow Controller
 
 Core Components:
-    - Text Generation (Mistral LLM)
-    - Image Generation (Stable Diffusion 1.5)
-    - Sound Generation (Bark/AudioCraft)
-    - Database Management (PostgreSQL)
-    - Game Logic Systems
+    Text Generation:
+        - Uses Mistral 7B Dolphin model
+        - Local inference via llama.cpp
+        - Uncensored content generation
+        - Dynamic story adaptation
+
+    Image Generation:
+        - Stable Diffusion 1.5
+        - Comic panel style
+        - Character portraits
+        - Scene visualization
+
+    Sound Generation:
+        - Bark/AudioCraft integration
+        - Voice synthesis
+        - Sound effects
+        - Ambient audio
+
+    Database:
+        - PostgreSQL with pg_embeddings
+        - SQLAlchemy ORM
+        - State persistence
+        - Media caching
 
 Game Flow:
-    1. Character Creation
-        - Player inputs character description
-        - System generates character stats and initial inventory
-        - Creates character portrait
-        - Establishes character in database
+    1. Character Creation:
+        - Description input
+        - Stats generation
+        - Portrait creation
+        - Database initialization
 
-    2. Story Progression
-        - TextAgent generates scene description
-        - ImageAgent creates comic panel
-        - SoundAgent generates ambient sounds
-        - Player receives multi-modal scene presentation
-        - Player inputs desired action
-        - System processes action through relevant agents
+    2. Story Progression:
+        - Scene generation
+        - Visual rendering
+        - Audio production
+        - Player interaction
+        - State updates
 
-    3. Action Resolution
-        - DiceRoller determines success/failure
-        - TextAgent interprets results
-        - CombatAgent handles battles
-        - NPCAgent manages interactions
-        - LootAgent handles item acquisition
-        - Database maintains state
+    3. Action Resolution:
+        - Probability calculation
+        - Outcome determination
+        - Multi-modal feedback
+        - State persistence
 
-    4. Death Handling
-        - CombatAgent processes character death
-        - Generates death scene and description
-        - Handles game over state
-        - Manages character deletion
+    4. Death Handling:
+        - Death scene creation
+        - State cleanup
+        - Game over processing
+        - Save management
 
-Technical Implementation:
-    - Asynchronous agent communication
-    - State management through PostgreSQL
-    - Media asset caching
-    - Error handling and recovery
-    - Save state management
+Technical Features:
+    - Asynchronous processing
     - Resource optimization
-
-Components:
-    Agents:
-        TextAgent:
-            - Central story coordinator
-            - Interprets player input
-            - Generates narrative content
-
-        ImageAgent:
-            - Creates scene visualizations
-            - Maintains visual consistency
-            - Handles comic panel layout
-
-        SoundAgent:
-            - Generates audio effects
-            - Creates character voices
-            - Manages ambient sound
-
-        NPCAgent:
-            - Handles character interactions
-            - Manages AI behaviors
-            - Controls monster actions
-
-        LootAgent:
-            - Generates items and rewards
-            - Manages drop tables
-            - Controls item distribution
-
-        CombatAgent:
-            - Manages battle system
-            - Handles death scenarios
-            - Controls combat flow
-
-    Utilities:
-        Database:
-            - Maintains game state
-            - Handles data persistence
-            - Manages relationships
-
-        DiceRoller:
-            - Handles probability
-            - Manages random events
-            - Controls action outcomes
+    - Error recovery
+    - State management
+    - Media caching
+    - Performance monitoring
 
 Usage:
-    Run this file directly to start the game:
+    Run directly to start game:
     `python adventureai.py`
+
+Requirements:
+    - Python 3.8+
+    - PostgreSQL 12+
+    - GPU recommended
+    - 16GB+ RAM
+    - See requirements.txt
 """
 
 from agents import (

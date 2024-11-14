@@ -1,17 +1,20 @@
 import psycopg2
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class Database:
-    def __init__(self, dbname, user, password, host='localhost'):
+    def __init__(self, dbname, user, password, host="localhost"):
         self.connection = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            password=password,
-            host=host
+            dbname=dbname, user=user, password=password, host=host
         )
         self.cursor = self.connection.cursor()
 
     def store_memory(self, key, value):
-        self.cursor.execute("INSERT INTO memories (key, value) VALUES (%s, %s)", (key, value))
+        self.cursor.execute(
+            "INSERT INTO memories (key, value) VALUES (%s, %s)", (key, value)
+        )
         self.connection.commit()
 
     def retrieve_memory(self, key):

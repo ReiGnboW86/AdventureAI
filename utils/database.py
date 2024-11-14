@@ -12,14 +12,6 @@ Schema:
         - effects: JSON[]
         - relationships: JSON
 
-    npcs:
-        - id: UUID primary key
-        - name: str
-        - type: str (merchant/enemy/quest)
-        - stats: JSON
-        - inventory: JSON
-        - faction: str
-
     game_state:
         - id: UUID primary key
         - character_id: UUID foreign key

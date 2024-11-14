@@ -77,13 +77,9 @@ Requirements:
 from agents import (
     TextAgent,
     ImageAgent,
-    SoundAgent,
-    NPCAgent,
-    LootAgent,
-    CombatAgent,
 )
-from database.database import Database
-from utils.dice import DiceRoller
+from utils.database import Database
+from utils.dice_roller import DiceRoller
 
 
 def play_game():
@@ -100,17 +96,31 @@ def play_game():
     7. Update game state
     8. Handle game over conditions
     """
-    # Initialize database and utilities
-    database = Database()
     dice_roller = DiceRoller()
-
-    # Initialize agents
     text_agent = TextAgent()
     image_agent = ImageAgent()
-    sound_agent = SoundAgent()
-    npc_agent = NPCAgent()
-    loot_agent = LootAgent()
-    combat_agent = CombatAgent()
+
+    game_active = True
+    dice_result = None
+    player_choice = ""
+
+    while game_active:
+        current_story: str = text_agent.generate_story(
+            dice_result, player_choice
+        )
+        current_image = image_agent.get_image(current_story)
+        display_media(current_story, current_image)
+
+        player_choice: str = input()
+        # Can also be False
+        dice_roll_needed: int = dice_roller.assess_situation(player_choice)
+        if dice_roll_needed:
+            dice_result: bool = dice_roller.roll_dice(dice_roll_needed)
+
+
+def display_media(current_story, current_image):
+    # RENDER DAT SHIT
+    pass
 
 
 if __name__ == "__main__":

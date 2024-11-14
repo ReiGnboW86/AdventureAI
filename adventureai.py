@@ -98,29 +98,35 @@ def play_game():
     """
     dice_roller = DiceRoller()
     text_agent = TextAgent()
-    image_agent = ImageAgent()
+    # image_agent = ImageAgent()
 
     game_active = True
-    dice_result = None
-    player_choice = ""
+    success = True
+    player_choice = "I try to wake up"
 
     while game_active:
-        current_story: str = text_agent.generate_story(
-            dice_result, player_choice
+        current_story: str = text_agent.generate_story(success, player_choice)
+        # current_image = image_agent.get_image(current_story)
+        display_media(f"\n{current_story}")
+
+        player_choice: str = input("\nWhat would you like to do?\n > ")
+        if player_choice == "exit":
+            game_active = False
+
+        # Dice roll can also be False
+        dice_roll_needed: int = dice_roller.assess_situation(
+            current_story, player_choice
         )
-        current_image = image_agent.get_image(current_story)
-        display_media(current_story, current_image)
 
-        player_choice: str = input()
-        # Can also be False
-        dice_roll_needed: int = dice_roller.assess_situation(player_choice)
         if dice_roll_needed:
-            dice_result: bool = dice_roller.roll_dice(dice_roll_needed)
+            display_media(f"\nTo do that, you must roll {dice_roll_needed}")
+            input("Roll dice!\n")
+            (success, player_roll) = dice_roller.roll_dice(dice_roll_needed)
+            display_media(f"You rolled a: {player_roll}!\n")
 
 
-def display_media(current_story, current_image):
-    # RENDER DAT SHIT
-    pass
+def display_media(current_story):
+    print(current_story)
 
 
 if __name__ == "__main__":

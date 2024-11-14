@@ -1,36 +1,65 @@
-"""
-Dice Rolling Utility Class
+from swarm import Swarm, Agent
+import openai
+import os
+import json
+from dotenv import load_dotenv
+from random import randint
 
-A static utility class for handling probability and random events.
-Not an agent - provides pure functions for random number generation.
-
-Core Functions:
-    roll_dice(sides: int, advantage: bool = False) -> int:
-        Rolls a die with specified number of sides. Handles advantage/disadvantage.
-
-    check_difficulty(action: str, context: dict) -> bool:
-        Determines if an action succeeds based on difficulty and modifiers.
-
-    calculate_success_chance(stats: dict, difficulty: int) -> float:
-        Calculates probability of success for an action.
-
-    generate_loot_roll(rarity: str) -> dict:
-        Generates random loot based on rarity tables.
-
-Technical Implementation:
-    - Uses cryptographically secure RNG via secrets module
-    - Supports dice from d4 to d100
-    - Implements advantage/disadvantage system (+/- rolls)
-    - Tracks critical successes (natural 20) and failures (natural 1)
-    - Maintains statistics for balancing
-
-Integration Points:
-    - CombatAgent: Attack rolls and damage
-    - LootAgent: Drop chance calculations
-    - NPCAgent: Interaction outcomes
-    - TextAgent: Story branch probability
-"""
+load_dotenv()
 
 
 class DiceRoller:
-    pass
+    def __init__(self):
+        self.client = Swarm()
+        self.narrator = Agent(
+            name="Dice master funk flex 3000",
+            model="gpt-4o-mini",
+            instructions=(
+                "You are a master of determining the difficulty of tasks set"
+                "in a dungeons and dragons type-video game."
+                "You are going to reviece input in the form of a story that has been told "
+                "along with a players choice of action in relation to that story."
+                "Your job is to assess the difficulty of that action and return a number"
+                "representing the difficulty."
+                "For example: standing up, walking around, reaching for things are considered "
+                "easy tasks and should have a difficulty of 0"
+                "Tasks such as: swinging a sword, climbing a cliff, romancing someone are "
+                "considered difficult and thus will have a higher difficulty."
+                "The available difficulties are limited to:"
+                "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ,20]"
+                "Always return only a number as your message. No letters, no symbols."
+            ),
+        )
+
+    def assess_situation(self, current_story, player_choice) -> int:
+        response = self.client.run(
+            agent=self.narrator,
+            messages=[
+                {
+                    "role": "user",
+                    "content": (
+                        f"Current scene: {current_story}\n"
+                        f"Player wants to: {player_choice}"
+                    ),
+                }
+            ],
+        )
+
+        try:
+            dice_roll_needed = int(response.messages[0]["content"])
+        except Exception:
+            dice_roll_needed = 10
+
+        return dice_roll_needed
+
+    def roll_dice(self, dice_roll_needed) -> bool:
+        player_roll = randint(1, 20)
+
+        if player_roll == 1:
+            success = False
+        elif player_roll >= dice_roll_needed or player_roll == 20:
+            success = True
+        else:
+            success = False
+
+        return (success, player_roll)

@@ -6,9 +6,7 @@ import json
 
 class TextAgent:
     def __init__(self):
-        self.API_KEY = os.environ.get("OPEN_AI_API_KEY")
-        self.client = Swarm(api_key=self.API_KEY)
-
+        self.client = Swarm()
         self.narrator = Agent(
             name="The Narrator",
             instructions="""
@@ -18,12 +16,12 @@ context(contains the previous story and what the player would like to do next),
 dice results(wether or not a player was successful with doing something),
 the action level(higher number means its action-packed, lower number means its calm and peaceful).
 Keep descriptions vivid but concise with a maximum of 200 words.
-Generate the next segment in this format:
-{{
-    "new_story": Detailed situation description. Datatype string.,
-    "new_location": "The location of 'text' (Does not need to change if it fits the narrative). Datatype string.,
-    "action_change": The change in action_level (example: +1, -3). Datatype integer.
-}}""",
+Format your response in three different messages and follow this example:
+
+"new_story": "Detailed situation description",
+"new_location": "The location of 'new_story' (Does not need to change if it fits the narrative).",
+"action_change": -2
+""",
             functions=[],
         )
 
@@ -56,9 +54,11 @@ Generate the next segment in this format:
                 "action_change": 0,
             }
 
-        new_story = story_data["new_story"]
-        self.location = story_data["new_location"]
-        self.action_level = self.action_level + story_data["action_change"]
+        new_story = response.messages[0]["content"]
+        self.location = response.messages[1]["content"]
+        self.action_level = (
+            self.action_level + response.messages[2]["content"]
+        )
 
         return new_story
 

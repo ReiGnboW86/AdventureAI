@@ -105,9 +105,7 @@ def play_game():
     player_choice = ""
 
     while game_active:
-        current_story: str = text_agent.generate_story(
-            dice_result, player_choice
-        )
+        current_story: str = text_agent.generate_story(dice_result, player_choice)
         current_image = image_agent.get_image(current_story)
         display_media(current_story, current_image)
 
@@ -118,9 +116,8 @@ def play_game():
             dice_result: bool = dice_roller.roll_dice(dice_roll_needed)
 
 
-def display_media(current_story, current_image):
-    # RENDER DAT SHIT
-    pass
+def display_media(current_story):
+    print(current_story)
 
 
 if __name__ == "__main__":

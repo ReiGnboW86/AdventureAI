@@ -3,12 +3,15 @@ import openai
 import os
 import json
 
+# API_KEY = os.environ.get("OPENAI_API_KEY")
+
+client = Swarm()
+
 
 class TextAgent:
     def __init__(self):
-        self.API_KEY = os.environ.get("OPEN_AI_API_KEY")
-        self.client = Swarm(api_key=self.API_KEY)
-
+        # if not API_KEY:
+        #     raise ValueError("API KEY NOT SET MTHRFKR")
         self.narrator = Agent(
             name="The Narrator",
             instructions="""
@@ -18,7 +21,7 @@ context(contains the previous story and what the player would like to do next),
 dice results(wether or not a player was successful with doing something),
 the action level(higher number means its action-packed, lower number means its calm and peaceful).
 Keep descriptions vivid but concise with a maximum of 200 words.
-Generate the next segment in this format:
+Generate the next segment as JSON in this format:
 {{
     "new_story": Detailed situation description. Datatype string.,
     "new_location": "The location of 'text' (Does not need to change if it fits the narrative). Datatype string.,
@@ -27,12 +30,12 @@ Generate the next segment in this format:
             functions=[],
         )
 
-        self.previous_story: str = ""
-        self.location = ""
-        self.action_level: int = 0
+        self.previous_story: str = "You woke up in the barn."
+        self.location = "New York City"
+        self.action_level: int = 7
 
     def generate_story(self, dice_result, player_choice):
-        response = self.client.run(
+        response = client.run(
             agent=self.narrator,
             messages=[
                 {
@@ -46,65 +49,58 @@ Generate the next segment in this format:
                 "current_action_level": self.action_level,
             },
         )
+        print(type(response.messages[0]["content"]))
 
-        try:
-            story_data = json.loads(response)
-        except json.JSONDecodeError:
-            story_data = {
-                "new_story": self.previous_story,
-                "new_location": self.location,
-                "action_change": 0,
-            }
-
-        new_story = story_data["new_story"]
-        self.location = story_data["new_location"]
-        self.action_level = self.action_level + story_data["action_change"]
+        new_story = response.messages[0]["content"]
+        # self.location = story_data["new_location"]
+        # self.action_level = self.action_level + story_data["action_change"]
 
         return new_story
 
-    def get_story(self, dice_result):
-        # DEPRECATED?
-        prompt = f"""
-- Previous Story: {self.previous_story}
-- Current Location: {self.location}
-- Current Action Level: {self.action_level}
 
-Generate the next segment in this format:
-{{
-    "new_story": Detailed situation description. Datatype string.,
-    "new_location": "The location of 'text' (Does not need to change if it fits the narrative). Datatype string.,
-    "action_change": The change in action_level (example: +1, -3). Datatype integer.
-}}
-"""
+#     def get_story(self, dice_result):
+#         # DEPRECATED?
+#         prompt = f"""
+# - Previous Story: {self.previous_story}
+# - Current Location: {self.location}
+# - Current Action Level: {self.action_level}
 
-        response = self.client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """
-You are a fantasy storyteller for a video game.
-Create engaging narratives based on provided context such as:
-context(contains the previous story and what the player would like to do next),
-dice results(wether or not a player was successful with doing something),
-the action level(higher number means its action-packed, lower number means its calm and peaceful).
-Keep descriptions vivid but concise with a maximum of 200 words.
-""",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.7,
-        )
+# Generate the next segment in this format:
+# {{
+#     "new_story": Detailed situation description. Datatype string.,
+#     "new_location": "The location of 'text' (Does not need to change if it fits the narrative). Datatype string.,
+#     "action_change": The change in action_level (example: +1, -3). Datatype integer.
+# }}
+# """
 
-        story_content = response.choices[0].message.content
+#         response = client.chat.completions.create(
+#             model="gpt-4",
+#             messages=[
+#                 {
+#                     "role": "system",
+#                     "content": """
+# You are a fantasy storyteller for a video game.
+# Create engaging narratives based on provided context such as:
+# context(contains the previous story and what the player would like to do next),
+# dice results(wether or not a player was successful with doing something),
+# the action level(higher number means its action-packed, lower number means its calm and peaceful).
+# Keep descriptions vivid but concise with a maximum of 200 words.
+# """,
+#                 },
+#                 {"role": "user", "content": prompt},
+#             ],
+#             temperature=0.7,
+#         )
 
-        try:
-            story_data = json.loads(story_content)
-        except json.JSONDecodeError:
-            story_data = {
-                "new_story": self.previous_story,
-                "new_location": self.location,
-                "action_change": 0,
-            }
+#         story_content = response.choices[0].message.content
 
-            return story_data
+#         try:
+#             story_data = json.loads(story_content)
+#         except json.JSONDecodeError:
+#             story_data = {
+#                 "new_story": self.previous_story,
+#                 "new_location": self.location,
+#                 "action_change": 0,
+#             }
+
+#             return story_data

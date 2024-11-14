@@ -1,6 +1,10 @@
 from agents.text_agent import TextAgent
 from agents.image_agent import ImageAgent
 from agents.sound_agent import SoundAgent
+from gui import run_gui
+from database import Database
+from image_generation import ImageGenerator
+from sound_playback import SoundPlayer
 
 """
 Adventure AI - Choose Your Own Adventure Game Framework
@@ -66,6 +70,15 @@ Deliverables:
 
 
 def play_game():
+    db = Database(dbname='adventure_db', user='user', password='password')
+    image_generator = ImageGenerator()
+    sound_player = SoundPlayer()
+
+    text_agent = TextAgent()
+    image_agent = ImageAgent()
+    sound_agent = SoundAgent()
+
+    run_gui()
     text_agent = TextAgent()
     image_agent = ImageAgent()
     sound_agent = SoundAgent()

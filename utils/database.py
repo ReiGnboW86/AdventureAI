@@ -49,4 +49,5 @@ Technical Features:
 
 
 class Database:
-    pass
+    def __init__():
+        pass

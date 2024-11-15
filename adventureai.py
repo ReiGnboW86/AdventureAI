@@ -5,10 +5,8 @@ Main Game Architecture and Flow Controller
 
 Core Components:
     Text Generation:
-        - Uses Mistral 7B Dolphin model
-        - Local inference via llama.cpp
-        - Uncensored content generation
-        - Dynamic story adaptation
+        - Uses Swarm agents to generate a story.
+        - Takes previous stories into context when generatting new ones.
 
     Image Generation:
         - Stable Diffusion 1.5
@@ -96,20 +94,30 @@ def play_game():
     7. Update game state
     8. Handle game over conditions
     """
-    dice_roller = DiceRoller()
-    text_agent = TextAgent()
-    # image_agent = ImageAgent()
 
     game_active = True
     success = True
-    player_choice = "I try to wake up"
+    player_choice = "I await further story development"
+
+    player_name = input("What is your name?\n > ")
+    player_description = input("Tell us about yourself!\n > ")
+    starting_location = input("Where does your story begin? \n > ")
+    player_choice = input("And what would you like to do?\n > ")
+
+    dice_roller = DiceRoller()
+    text_agent = TextAgent(
+        player_name, player_description, starting_location, player_choice
+    )
+    # image_agent = ImageAgent()
 
     while game_active:
         current_story: str = text_agent.generate_story(success, player_choice)
         # current_image = image_agent.get_image(current_story)
         display_media(f"\n{current_story}")
 
-        player_choice: str = input("\nWhat would you like to do?\n > ")
+        player_choice: str = input(
+            f"\nWhat does {text_agent.player_name} do next?\n > "
+        )
         if player_choice == "exit":
             game_active = False
 
@@ -126,6 +134,7 @@ def play_game():
 
 
 def display_media(current_story):
+    print("\n" * 50)
     print(current_story)
 
 

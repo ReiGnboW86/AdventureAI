@@ -11,7 +11,7 @@ load_dotenv()
 class DiceRoller:
     def __init__(self):
         self.client = Swarm()
-        self.narrator = Agent(
+        self.agent = Agent(
             name="Dice master funk flex 3000",
             model="gpt-4o-mini",
             instructions=(

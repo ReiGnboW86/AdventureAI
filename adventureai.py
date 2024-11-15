@@ -74,7 +74,9 @@ Requirements:
 
 from agents import (
     TextAgent,
+    SoundAgent,
     ImageAgent,
+    TriageAgent,
 )
 from utils.database import Database
 from utils.dice_roller import DiceRoller
@@ -95,28 +97,26 @@ def play_game():
     8. Handle game over conditions
     """
 
-    game_active = True
+    name = input("What is your name?\n > ")
+    description = input("Tell us about yourself!\n > ")
+    location = input("Where does your story begin? \n > ")
+    choice = input("And what would you like to do?\n > ")
     success = True
-    player_choice = "I await further story development"
 
-    player_name = input("What is your name?\n > ")
-    player_description = input("Tell us about yourself!\n > ")
-    starting_location = input("Where does your story begin? \n > ")
-    player_choice = input("And what would you like to do?\n > ")
-
+    dungeon_master = TriageAgent(name, description, location)
     dice_roller = DiceRoller()
-    text_agent = TextAgent(
-        player_name, player_description, starting_location, player_choice
-    )
-    # image_agent = ImageAgent()
+    author = TextAgent()
+    narrator = SoundAgent()
+    illustrator = None  # ImageAgent()
 
+    game_active = True
     while game_active:
-        current_story: str = text_agent.generate_story(success, player_choice)
-        # current_image = image_agent.get_image(current_story)
+        current_story: str = dungeon_master.next_story(choice, success)
+        # current_image = illustrator.get_image(current_story)
         display_media(f"\n{current_story}")
 
         player_choice: str = input(
-            f"\nWhat does {text_agent.player_name} do next?\n > "
+            f"\nWhat does {author.player_name} do next?\n > "
         )
         if player_choice == "exit":
             game_active = False

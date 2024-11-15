@@ -1,12 +1,9 @@
 from swarm import Swarm, Agent
-import openai
-import os
-import json
 from dotenv import load_dotenv
+from ..adventureai import image_agent, sound_agent
+
 
 load_dotenv()
-
-# API_KEY = os.environ.get("OPENAI_API_KEY")
 
 client = Swarm()
 
@@ -41,24 +38,25 @@ class TextAgent:
             f"{player_name}'s next action: {player_choice}"
         )
         self.client = Swarm()
-        self.narrator = Agent(
-            name="The Narrator",
+        self.agent = Agent(
+            name="The Author",
             model="gpt-4o-mini",
             instructions="""
 You are an interactive storyteller for a video game.
 Your role is to generate dynamic, atmospheric narratives that adapt to player actions and game conditions. 
-You analyze the users input and take into consideration which way they wiches to progress the story.
+You analyze the users input and take into consideration which way they wish to progress the story.
 The story should be of length maximum 100 words.
 
 - Create vivid, concise descriptions that capture both atmosphere and action
-- Adapt the tone and pacing based on the provided action level
 - Incorporate outcomes of player actions
 - Maintain narrative continuity with previous story elements
+- Transfer to sound agent for text to speech generation
 
 Before crafting each scene, you'll receive as context variables:
 1. previous_story: Previous story events.
 2. player_choice: What the player chose to do with the previous story.
 3. player_choice_successful: Indicates if the player succeded with their choice.""",
+            functions=[self._transfer_to_voice_agent],
         )
 
     def generate_story(self, dice_result, player_choice):
@@ -68,7 +66,7 @@ Before crafting each scene, you'll receive as context variables:
 
     def _make_api_call(self, dice_result, player_choice) -> str:
         response = self.client.run(
-            agent=self.narrator,
+            agent=self.author,
             messages=[
                 {
                     "role": "user",
@@ -96,3 +94,7 @@ Before crafting each scene, you'll receive as context variables:
         self.previous_story = next_story
 
         return next_story
+
+    def _transfer_to_voice_agent():
+        """Transfers to the text to speech agent"""
+        return sound_agent.narrator
